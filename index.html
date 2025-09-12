@@ -5,6 +5,14 @@
         <!-- Your other head elements -->
     </head>
     <body>
+<script>
+  // clear Mailchimp popup cookies on each load
+  document.cookie.split(";").forEach(function(c) { 
+    if (c.trim().startsWith("MCPopupClosed") || c.trim().startsWith("MCPopupSubscribed")) {
+      document.cookie = c.split("=")[0] + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+    }
+  });
+</script>
 <script id="mcjs">!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/da01e192b9e5c7e47f1697a1b/aee3b1fd5f761d99c97a62e16.js");</script>
     </body>
     </html>
