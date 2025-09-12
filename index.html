@@ -6,12 +6,46 @@
     </head>
     <body>
 <script>
-  // clear Mailchimp popup cookies on each load
-  document.cookie.split(";").forEach(function(c) { 
-    if (c.trim().startsWith("MCPopupClosed") || c.trim().startsWith("MCPopupSubscribed")) {
-      document.cookie = c.split("=")[0] + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
-    }
+/**
+ * Force the Mailchimp popup to show on every visit (for testing or by choice).
+ * - Clears common cookies at both host and .domain scopes
+ * - Clears MC-related localStorage/sessionStorage keys
+ * - Optional: only force when URL has ?forcepopup=1
+ */
+(function () {
+  var onlyWhenForced = false; // set to true if you want to require ?forcepopup=1
+
+  var urlForces = new URLSearchParams(location.search).get('forcepopup') === '1';
+  if (onlyWhenForced && !urlForces) return;
+
+  // 1) Clear Mailchimp cookies (both host and .domain)
+  var names = ['MCPopupClosed','MCPopupSubscribed'];
+  var host = location.hostname;
+  var domains = [host, '.' + host.replace(/^www\./,'')]; // e.g., romivalladares.github.io and .romivalladares.github.io
+
+  names.forEach(function (name) {
+    domains.forEach(function (dom) {
+      // expire at root path
+      document.cookie = name + "=; Max-Age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=" + dom + ";";
+      // also try without domain attribute (some browsers)
+      document.cookie = name + "=; Max-Age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;";
+    });
   });
+
+  // 2) Clear MC-related storage keys (defensive)
+  function wipeStorage(store){
+    try {
+      var keys = [];
+      for (var i=0; i<store.length; i++) keys.push(store.key(i));
+      keys.forEach(function(k){
+        var kk = (k || '').toLowerCase();
+        if (kk.includes('mc') || kk.includes('popup')) store.removeItem(k);
+      });
+    } catch(e) {}
+  }
+  wipeStorage(localStorage);
+  wipeStorage(sessionStorage);
+})();
 </script>
 <script id="mcjs">!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/da01e192b9e5c7e47f1697a1b/aee3b1fd5f761d99c97a62e16.js");</script>
     </body>
