@@ -1,52 +1,179 @@
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Your GitHub Pages Site</title>
-        <!-- Your other head elements -->
-    </head>
-    <body>
-<script>
-/**
- * Force the Mailchimp popup to show on every visit (for testing or by choice).
- * - Clears common cookies at both host and .domain scopes
- * - Clears MC-related localStorage/sessionStorage keys
- * - Optional: only force when URL has ?forcepopup=1
- */
-(function () {
-  var onlyWhenForced = false; // set to true if you want to require ?forcepopup=1
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sorteo – Cuerpo Raíz</title>
+  <style>
+    /* Page + modal look */
+    :root{
+      --bg: #ffffff; --fg:#111; --accent:#111;
+      --radius: 18px; --shadow:0 10px 30px rgba(0,0,0,.18);
+    }
+    html,body{height:100%}
+    body{
+      margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      display:flex; align-items:center; justify-content:center; background:#fafafa; color:var(--fg);
+    }
+    .wrap{max-width:680px;width:100%;padding:24px;text-align:center}
+    .hidden{display:none}
+    .btn{display:inline-block;padding:12px 16px;border:1px solid #000;border-radius:10px;text-decoration:none}
 
-  var urlForces = new URLSearchParams(location.search).get('forcepopup') === '1';
-  if (onlyWhenForced && !urlForces) return;
+    .mc-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:9999}
+    .mc-modal{width:min(92vw,520px);background:var(--bg);color:var(--fg);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .mc-head{padding:20px 22px 0}
+    .mc-title{margin:0 0 6px;font:800 22px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    .mc-sub{margin:0 0 14px;opacity:.8}
+    .mc-body{padding:0 22px 22px}
+    .mc-close{position:absolute;top:10px;right:12px;border:0;background:transparent;font-size:20px;cursor:pointer;color:#666}
 
-  // 1) Clear Mailchimp cookies (both host and .domain)
-  var names = ['MCPopupClosed','MCPopupSubscribed'];
-  var host = location.hostname;
-  var domains = [host, '.' + host.replace(/^www\./,'')]; // e.g., romivalladares.github.io and .romivalladares.github.io
+    /* Embedded form styling (based on your fields) */
+    .mc-field-group{margin-bottom:12px;text-align:left}
+    .mc-label{display:block;margin:0 0 6px;font-weight:600}
+    .mc-input{width:100%;padding:12px 14px;border:1px solid #d5d7da;border-radius:10px;font-size:16px}
+    .mc-submit{width:100%;padding:12px 16px;border:0;border-radius:12px;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
+    .foot{margin-top:10px}
+    .badge{display:block;margin-top:10px;opacity:.7}
+    @media (prefers-reduced-motion: no-preference){
+      .mc-overlay[data-open="1"]{animation:fade .18s ease-out both}
+      @keyframes fade{from{opacity:0}to{opacity:1}}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>🎁 Bienvenida al Sorteo</h1>
+    <p>Si el formulario no aparece, usá el formulario alternativo abajo 👇</p>
 
-  names.forEach(function (name) {
-    domains.forEach(function (dom) {
-      // expire at root path
-      document.cookie = name + "=; Max-Age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=" + dom + ";";
-      // also try without domain attribute (some browsers)
-      document.cookie = name + "=; Max-Age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;";
-    });
-  });
+    <!-- Always-present fallback (hidden unless needed) -->
+    <div id="fallback" class="hidden" aria-live="polite">
+      <!-- Your EMBEDDED FORM (rewritten to be self-contained + HTTPS) -->
+      <form action="https://cuerporaizbreathwork.us8.list-manage.com/subscribe/post?u=da01e192b9e5c7e47f1697a1b&amp;id=415cc74907&amp;f_id=00810fe1f0"
+            method="post" target="_self" novalidate>
+        <div class="mc-field-group">
+          <label class="mc-label" for="mce-EMAIL">Email <span class="asterisk">*</span></label>
+          <input class="mc-input" type="email" name="EMAIL" id="mce-EMAIL" required autocomplete="email" />
+        </div>
 
-  // 2) Clear MC-related storage keys (defensive)
-  function wipeStorage(store){
-    try {
-      var keys = [];
-      for (var i=0; i<store.length; i++) keys.push(store.key(i));
-      keys.forEach(function(k){
-        var kk = (k || '').toLowerCase();
-        if (kk.includes('mc') || kk.includes('popup')) store.removeItem(k);
+        <!-- Mailchimp responses (kept minimal) -->
+        <div id="mce-responses" class="clear foot" aria-live="polite" style="text-align:left;font-size:14px"></div>
+
+        <!-- honeypot (must keep) -->
+        <div aria-hidden="true" style="position:absolute; left:-5000px;">
+          <input type="text" name="b_da01e192b9e5c7e47f1697a1b_415cc74907" tabindex="-1" value="">
+        </div>
+
+        <button type="submit" name="subscribe" class="mc-submit">Quiero participar</button>
+
+        <!-- optional badge (HTTPS) -->
+        <a class="badge" href="https://eepurl.com/jnf07M" target="_blank" rel="noopener">
+          <img src="https://digitalasset.intuit.com/render/content/dam/intuit/mc-fe/en_us/images/intuit-mc-rewards-text-dark.svg"
+               alt="Intuit Mailchimp" width="220" height="40">
+        </a>
+      </form>
+      <p style="margin-top:12px">
+        O <a class="btn" href="https://romivalladares.github.io/SimpleLandingPages/" target="_blank" rel="noopener">abrir en el navegador</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Modal that imitates a popup (used when mcjs is allowed) -->
+  <div id="mcOverlay" class="mc-overlay" aria-hidden="true">
+    <div class="mc-modal" role="dialog" aria-modal="true" aria-labelledby="mcTitle">
+      <button class="mc-close" aria-label="Cerrar" id="mcClose">×</button>
+      <div class="mc-head">
+        <h2 id="mcTitle" class="mc-title">🎁 Sorteo – Cuerpo Raíz</h2>
+        <p class="mc-sub">Dejá tu email para participar. Revisá tu bandeja (y spam) tras enviar.</p>
+      </div>
+      <div class="mc-body">
+        <!-- We reuse the same embedded form inside the modal too -->
+        <form action="https://cuerporaizbreathwork.us8.list-manage.com/subscribe/post?u=da01e192b9e5c7e47f1697a1b&amp;id=415cc74907&amp;f_id=00810fe1f0"
+              method="post" target="_self" novalidate>
+          <div class="mc-field-group">
+            <label class="mc-label" for="mce-EMAIL-2">Email <span class="asterisk">*</span></label>
+            <input class="mc-input" type="email" name="EMAIL" id="mce-EMAIL-2" required autocomplete="email" />
+          </div>
+          <div aria-hidden="true" style="position:absolute; left:-5000px;">
+            <input type="text" name="b_da01e192b9e5c7e47f1697a1b_415cc74907" tabindex="-1" value="">
+          </div>
+          <button class="mc-submit" type="submit">Quiero participar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1) Clear Mailchimp suppression so popup can re-open when allowed -->
+  <script>
+    (function () {
+      ["MCPopupClosed","MCPopupSubscribed"].forEach(function (name) {
+        document.cookie = name+"=; Max-Age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;";
+        document.cookie = name+"=; Max-Age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=."+location.hostname+";";
       });
-    } catch(e) {}
-  }
-  wipeStorage(localStorage);
-  wipeStorage(sessionStorage);
-})();
-</script>
-<script id="mcjs">!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/da01e192b9e5c7e47f1697a1b/aee3b1fd5f761d99c97a62e16.js");</script>
-    </body>
-    </html>
+      try {
+        ["localStorage","sessionStorage"].forEach(function(store){
+          var s=window[store]; if(!s) return;
+          var ks=[]; for(var i=0;i<s.length;i++) ks.push(s.key(i));
+          ks.forEach(function(k){ if((k||"").toLowerCase().includes("mc") || (k||"").toLowerCase().includes("popup")) s.removeItem(k); });
+        });
+      } catch(e){}
+    })();
+  </script>
+
+  <!-- 2) Detect IG/FB webview or strict browsers and show fallback (skip mcjs) -->
+  <script>
+    (function () {
+      var ua = navigator.userAgent || "";
+      var isIG = ua.includes("Instagram");
+      var isFB = ua.includes("FBAN") || ua.includes("FBAV");
+      var isFirefox = ua.includes("Firefox"); // often strict ETP by default in-app
+      if (isIG || isFB || isFirefox) {
+        document.getElementById("fallback").classList.remove("hidden");
+        window.skipMcPopup = true;
+      }
+    })();
+  </script>
+
+  <!-- 3) If allowed, try to load Mailchimp mcjs (for your original styled popup).
+         If it fails or times out, show the embedded fallback. -->
+  <script>
+    (function () {
+      function openModal(){
+        var ov = document.getElementById('mcOverlay');
+        if (!ov) return;
+        ov.style.display = 'flex';
+        ov.dataset.open = "1";
+        document.documentElement.style.overflow = 'hidden';
+        // close handlers
+        document.getElementById('mcClose').onclick = function(){ 
+          ov.style.display='none'; delete ov.dataset.open; document.documentElement.style.overflow=''; 
+        };
+        ov.addEventListener('click', function(e){ if(e.target===ov){ document.getElementById('mcClose').click(); } });
+        window.addEventListener('keydown', function(e){ if(e.key==='Escape'){ document.getElementById('mcClose').click(); }});
+      }
+
+      if (window.skipMcPopup) return; // we’re in IG/FB/Firefox → show fallback only
+
+      // Try to load mcjs. If it loads, we still open our modal immediately
+      // so the experience looks like a popup even if mcjs is blocked by IG later.
+      var loaded = false, failed = false, timeout = 1800; // 1.8s
+      var s = document.createElement("script");
+      s.id = "mcjs";
+      s.async = 1;
+      s.src = "https://chimpstatic.com/mcjs-connected/js/users/da01e192b9e5c7e47f1697a1b/aee3b1fd5f761d99c97a62e16.js";
+      s.onload = function(){ loaded = true; };
+      s.onerror = function(){ failed = true; };
+      document.body.appendChild(s);
+
+      // Open our modal quickly for UX; if mcjs loads, good; if not, users can still submit.
+      setTimeout(openModal, 300);
+
+      // If mcjs still not loaded after timeout, reveal the fallback under it (for users who close the modal).
+      setTimeout(function(){
+        if (!loaded) {
+          document.getElementById("fallback").classList.remove("hidden");
+        }
+      }, timeout);
+    })();
+  </script>
+</body>
+</html>
