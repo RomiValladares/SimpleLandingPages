@@ -18,36 +18,48 @@ import { fallbackHTML, modalHTML } from './templates.js';
   } catch(e){}
 })();
 
-/* 1) Detect environments that block third-party JS (IG/FB webview, Firefox strict) */
+// Detect strict environments
 const ua = navigator.userAgent || "";
-const IN_APP_IG = ua.includes("Instagram");
-const IN_APP_FB = ua.includes("FBAN") || ua.includes("FBAV");
-const FIREFOX   = ua.includes("Firefox");
-const shouldSkipMcjs = IN_APP_IG || IN_APP_FB || FIREFOX;
+const shouldSkipMcjs =
+  ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV") || ua.includes("Firefox");
 
-/* 2) Inject fallback form (always present under the modal) */
+// Inject fallback (hidden initially)
 document.getElementById('fallback-root').innerHTML = fallbackHTML;
+const fallback = document.getElementById('fallback');
 
-/* 3) Inject modal and wire events (used when mcjs allowed) */
-if (!shouldSkipMcjs) {
-  document.getElementById('modal-root').innerHTML = modalHTML;
-
-  const overlay = document.getElementById('overlay');
-  const close   = document.getElementById('close');
-
-  const openModal = () => {
-    overlay?.setAttribute('data-open','1');
-    close?.addEventListener('click', () => overlay.removeAttribute('data-open'));
-    overlay?.addEventListener('click', e => { if (e.target === overlay) close.click(); });
-    window.addEventListener('keydown', e => { if (e.key === 'Escape') close.click(); });
-  };
-
-  // Open our modal quickly for smooth UX
-  setTimeout(openModal, 300);
-
-  // Optionally load Mailchimp mcjs for “Connected site” analytics (won’t break if blocked)
-  const s = document.createElement("script");
-  s.id = "mcjs"; s.async = 1;
-  s.src = "https://chimpstatic.com/mcjs-connected/js/users/da01e192b9e5c7e47f1697a1b/aee3b1fd5f761d99c97a62e16.js";
-  document.body.appendChild(s);
+// If strict env → show fallback and stop
+if (shouldSkipMcjs) {
+  fallback.classList.remove('hidden');
+  return;
 }
+
+// Inject modal
+document.getElementById('modal-root').innerHTML = modalHTML;
+
+const overlay = document.getElementById('overlay');
+const close   = document.getElementById('close');
+
+function openModal() {
+  overlay?.setAttribute('data-open','1');
+}
+
+function closeModal() {
+  overlay?.removeAttribute('data-open');
+  // now reveal fallback so there’s still a form on the page
+  fallback?.classList.remove('hidden');
+}
+
+// Wire events
+close?.addEventListener('click', closeModal);
+overlay?.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+// Open our modal quickly
+setTimeout(openModal, 300);
+
+// (Optional) Load mcjs for connected-site/analytics; it won’t create a second modal here
+const s = document.createElement("script");
+s.id = "mcjs"; s.async = 1;
+s.src = "https://chimpstatic.com/mcjs-connected/js/users/da01e192b9e5c7e47f1697a1b/aee3b1fd5f761d99c97a62e16.js";
+document.body.appendChild(s);
+
