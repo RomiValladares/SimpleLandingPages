@@ -3,92 +3,78 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Sorteo – Depop uy</title>
 
-  <!-- Ahsing font -->
-  <style>
-    @font-face{
-      font-family:"Ahsing";
-      src:url("ahsing-font/typogama-ahsing.otf") format("opentype");
-      font-weight:400 900;
-      font-style:normal;
-      font-display:swap;
-    }
+  <style> 
+  @font-face {
+    font-family: "Ahsing";
+    src: url("ahsing-font/typogama-ahsing.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+  }
   </style>
 
-  <!-- Page styles (self-contained) -->
+  <title>Sorteo – Depop uy</title>
+
   <style>
+    /* baseline test color to prove CSS is applied */
     html { background:#000; }
+
     body {
       margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-      min-height:100vh; color:#fff;
-      display:flex; flex-direction:column; align-items:center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height:100vh;
+      color:#fff;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
     }
+    .bg {
+      position:fixed; inset:0; z-index:-2;
+      background: url("bg.jpg") center/cover no-repeat;
+    }
+    .tint {
+      position:fixed; inset:0; z-index:-1;
+      background: rgba(144,33,41,.9);
+    }
+    .wrap { text-align:center; padding: 20px 14px 0; max-width: 760px; width:100%; }
+    .brand { margin:0 0 6px; letter-spacing:.12em; font-weight:900; opacity:.9; font-family:"Ahsing", serif; }
+    .title { margin:.25rem 0 .5rem; font-weight:800; line-height:1.1; font-size: clamp(26px, 9vw, 44px); font-family:"Ahsing", serif; }
+    .sub { margin:0 auto; max-width:680px; font-size: clamp(14px, 3.8vw, 18px); opacity:.95 }
 
-    .bg { position:fixed; inset:0; z-index:-2; background:url("bg.jpg") center/cover no-repeat; }
-    .tint { position:fixed; inset:0; z-index:-1; background:rgba(144,33,41,.90); }
-
-    .wrap {
-      text-align:center; padding:20px 14px 0;
-      max-width:760px; width:100%;
-    }
-    .brand {
-      margin:0 0 6px; letter-spacing:.12em; font-weight:900; opacity:.9;
-      font-family:"Ahsing", serif;
-    }
-    .title {
-      margin:.25rem 0 .5rem; line-height:1.1;
-      font-size:clamp(26px, 9vw, 44px);
-      font-weight:800; font-family:"Ahsing", serif;
-    }
-    .sub {
-      margin:0 auto; max-width:680px; opacity:.95;
-      font-size:clamp(14px, 3.8vw, 18px);
-    }
-
-    /* CARD — keep narrow enough on phones */
     .card {
-      width:min(420px, 92vw);           /* <- tighter than before */
-      margin:16px auto 24px;
+      width:min(720px, 94vw);
+      margin: 14px auto 24px;
       background:#fff; color:#111;
-      border-radius:16px;
-      box-shadow:0 14px 36px rgba(0,0,0,.22);
+      border-radius: 16px;
+      box-shadow: 0 14px 36px rgba(0,0,0,.22);
     }
-    .card-body { padding:16px; }        /* inner padding */
-    .slab {
-      background:#fff; border-radius:14px;
-      box-shadow:0 6px 16px rgba(0,0,0,.12);
-      padding:14px; box-sizing:border-box;
-    }
+    .card-body { padding: clamp(14px, 4.2vw, 28px); }
 
-    /* FORM */
-    .lab { display:block; margin:0 0 8px; font-weight:600; color:#6b6f76; font-size:14px; text-align:left; }
+    .slab {
+      margin:0 auto; width:min(640px, 100%);
+      background:#fff; border-radius:14px;
+      box-shadow: 0 6px 16px rgba(0,0,0,.12);
+      padding: clamp(12px, 4vw, 22px);
+    }
+    .lab { display:block; margin:0 0 6px; font-weight:600; color:#6b6f76; font-size: clamp(13px,3.5vw,14px) }
     .input {
       width:100%; box-sizing:border-box;
-      padding:12px 14px; font-size:16px;
+      padding: 12px 14px;
+      font-size: 16px;
       border:1px solid #d8dae0; border-radius:12px; background:#fff;
     }
-    .input:focus { outline:none; border-color:#b8bcc6; box-shadow:0 0 0 4px rgba(229,158,32,.12); }
-
+    .input:focus { outline:none; border-color:#b8bcc6; box-shadow:0 0 0 4px rgba(229,158,32,.12) }
     .cta {
-      width:100%; margin-top:12px; padding:14px 16px;
+      width:100%; margin-top:10px; padding: 12px 16px;
       border:0; border-radius:12px; cursor:pointer;
       background:#E59E20; color:#fff; font-weight:800; font-size:16px;
     }
-
-    /* Small phones: nudge sizes */
-    @media (max-width:420px){
-      .title { font-size:clamp(22px, 8vw, 34px); }
-      .card-body { padding:14px; }
-      .slab { padding:12px; }
-      .input, .cta { font-size:16px; padding:12px 14px; }
-    }
+    .muted { color:#6b6f76; font-size:13px; margin-top:10px; text-align:center }
   </style>
 </head>
 <body>
   <div class="bg" aria-hidden="true"></div>
-  <div class="tint" aria-hidden="true"></div>
+  <div class="tint"></div>
 
   <div class="wrap">
     <p class="brand">DEPOP_UY</p>
@@ -96,7 +82,6 @@
     <p class="sub">Con tu email tenés más chances de participar. Además, te regalamos un cupón de $300 para tu próxima compra.</p>
   </div>
 
-  <!-- Fallback form (with padding wrappers) -->
   <div id="fallback" class="card">
     <div class="card-body">
       <div class="slab">
