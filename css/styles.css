@@ -68,3 +68,8 @@ body{
   .card{box-shadow:0 10px 26px rgba(0,0,0,.18)}
   .slab{border-radius:14px}
 }
+
+/* --- emergency: force the fallback visible in IG --- */
+#fallback { display:block !important; }
+#fallback .card { z-index: 1; position: relative; }
+
