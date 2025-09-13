@@ -108,3 +108,55 @@ body{
 /* avoid the IG top bar overlapping the content */
 .wrap { padding-top: max(14px, env(safe-area-inset-top)); }
 
+/* Scoped fallback form overrides */
+#fallback form {
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+}
+
+#fallback .mc-field {
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+#fallback .mc-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+#fallback .mc-field input[type="email"] {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+#fallback .mc-field input[type="email"]:focus {
+  border-color: #b8bcc6;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(229,158,32,.2);
+}
+
+#fallback .cta,
+#fallback input[type="submit"] {
+  width: 100%;
+  background: var(--accent);
+  color: var(--accentText);
+  font-weight: 700;
+  border: 0;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#fallback .cta:hover,
+#fallback input[type="submit"]:hover {
+  background: #d28a12;
+}
