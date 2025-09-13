@@ -2,145 +2,165 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sorteo – Cuerpo Raíz</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Sorteo – Depop UY</title>
+
+  <!-- Custom font (OTF) -->
+  <style>
+    /* Load your .otf (relative to index.html) */
+    @font-face{
+      font-family: "Ahsing";
+      src: url("ahsing-font/typogama-ahsing.otf") format("opentype");
+      font-weight: 400 900;
+      font-style: normal;
+      font-display: swap; /* shows system font first, swaps when loaded */
+    }
+  </style>
 
   <style>
     /* ====== THEME TOKENS ====== */
     :root{
-      /* Replace this with your real image URL */
-      --bg-image: url('YOUR_BACKGROUND_IMAGE.jpg');
+      /* Your background image file */
+      --bg-image: url('bg.jpg');
 
       /* Colors */
-      --tint: rgba(144, 33, 41, .90);     /* overlay wine/red */
-      --card: rgba(255,255,255,.95);
+      --tint: rgba(144, 33, 41, .92);     /* overlay wine/red */
+      --card: rgba(255,255,255,.97);
       --text: #2A2A2A;
       --muted:#6b6f76;
       --accent:#E59E20;                   /* CTA button */
       --accentText:#fff;
 
       /* Radii & shadows */
-      --radius-xl: 24px;
-      --radius-md: 14px;
-      --shadow-lg: 0 18px 48px rgba(0,0,0,.25);
-      --shadow-sm: 0 6px 18px rgba(0,0,0,.12);
+      --radius-xl: 22px;
+      --radius-md: 12px;
+      --shadow-lg: 0 14px 36px rgba(0,0,0,.22);
+      --shadow-sm: 0 6px 16px rgba(0,0,0,.12);
     }
 
-    /* ====== PAGE BACKDROP ====== */
+    /* ====== BASE ====== */
     html,body{height:100%}
+    html{-webkit-text-size-adjust:100%}
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--text);
-      display:flex; align-items:center; justify-content:center;
       background: #000;
       position: relative;
       overflow-x: hidden;
+      min-height: 100dvh; /* better on mobile */
     }
-    /* Background image */
+
+    /* Background image + tint */
     .bg{
-      position:fixed; inset:0;
+      position:fixed; inset:0; z-index:-2;
       background-image: var(--bg-image);
       background-size: cover;
       background-position: center;
-      filter: none;
-      z-index: -2;
     }
-    /* Tint overlay */
     .tint{
       position:fixed; inset:0; z-index:-1;
       background: var(--tint);
-      /* soft wave mask on bottom for some personality (safe for IG) */
-      -webkit-mask-image: radial-gradient(120% 80% at 50% 10%, #000 60%, transparent 66%);
-              mask-image: radial-gradient(120% 80% at 50% 10%, #000 60%, transparent 66%);
     }
 
-    /* ====== LAYOUT WRAPPER (for fallback form under modal) ====== */
-    .wrap{ width:min(960px, 92vw); padding: 18px; margin: 24px auto; }
-    .hidden{ display:none; }
-
-    /* ====== CARD (used by both modal + fallback) ====== */
-    .card{
-      width:min(680px, 92vw);
+    /* Headline block */
+    .wrap{
+      width:min(960px, 92vw);
+      padding: clamp(10px, 3vw, 18px);
+      margin: clamp(8px, 2.5vh, 24px) auto 0;
+      text-align:center;
+    }
+    .brand{
+      margin: 0 0 6px;
+      color: #ffe6d1;
+      letter-spacing: .12em;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: clamp(12px, 2.6vw, 16px);
+    }
+    .title{
+      margin: 0 0 10px;
+      font-family: "Ahsing", ui-serif, Georgia, serif; /* use your font */
+      line-height: 1.05;
+      font-size: clamp(26px, 10vw, 44px);
+      color: #fff;
+      text-shadow: 0 2px 8px rgba(0,0,0,.22);
+    }
+    .sub{
       margin: 0 auto;
+      max-width: 680px;
+      color:#ffe6d1;
+      font-size: clamp(14px, 3.8vw, 18px);
+    }
+
+    /* Card & slab (reused in modal + fallback) */
+    .card{
+      width:min(720px, 94vw);
+      margin: clamp(8px, 2.5vh, 18px) auto;
       background: var(--card);
       border-radius: var(--radius-xl);
       box-shadow: var(--shadow-lg);
       backdrop-filter: blur(2px);
       overflow:hidden;
     }
-    .card-body{ padding: clamp(18px, 4vw, 36px); }
-
-    .title{
-      margin: 0 0 4px 0;
-      font-weight: 800;
-      line-height: 1.1;
-      font-size: clamp(28px, 6vw, 44px);
-      text-align:center;
-      color: #fff;
-      text-shadow: 0 2px 8px rgba(0,0,0,.22);
+    .card-body{
+      padding: clamp(14px, 4.2vw, 28px);
     }
-    .brand{
-      margin: 0 0 8px 0;
-      text-align:center;
-      color: #ffe6d1;
-      letter-spacing: .12em;
-      font-weight: 900;
-      text-transform: uppercase;
-      font-size: clamp(13px, 2.6vw, 16px);
-    }
-    .sub{
-      margin: 0 auto 18px;
-      max-width: 680px;
-      text-align:center;
-      color:#ffe6d1;
-      font-size: clamp(14px, 2.8vw, 18px);
-    }
-
-    /* The semi-transparent content slab behind the fields */
     .slab{
-      margin: 18px auto 0;
-      width:min(620px, 92%);
-      background: rgba(255,255,255,.92);
-      border-radius: 18px;
+      margin: 0 auto;
+      width:min(640px, 100%);
+      background: rgba(255,255,255,.98);
+      border-radius: 16px;
       box-shadow: var(--shadow-sm);
-      padding: clamp(14px, 3.6vw, 22px);
+      padding: clamp(12px, 4vw, 22px);
     }
 
-    /* ====== FORM ELEMENTS ====== */
-    .mc-field{ margin-bottom: 12px; text-align:left; }
-    .lab{ display:block; margin:0 0 6px; font-weight:600; color: var(--muted); }
+    /* Form */
+    .mc-field{ margin-bottom: 12px; text-align:left }
+    .lab{ display:block; margin:0 0 6px; font-weight:600; color: var(--muted); font-size: clamp(13px,3.5vw,14px) }
     .input{
       width:100%; box-sizing:border-box;
-      padding: 14px 16px; font-size: 16px;
+      padding: clamp(12px, 3.6vw, 14px) clamp(14px,3.6vw,16px);
+      font-size: clamp(16px, 4.2vw, 16px);
       border: 1px solid #d8dae0; border-radius: 12px; outline: none;
       background:#fff;
     }
-    .input:focus{ border-color:#b8bcc6; box-shadow: 0 0 0 4px rgba(229,158,32,.12); }
-
+    .input:focus{ border-color:#b8bcc6; box-shadow: 0 0 0 4px rgba(229,158,32,.12) }
     .cta{
-      width:100%; padding: 14px 18px; border:0;
+      width:100%; padding: clamp(12px, 3.8vw, 14px) clamp(16px, 4.2vw, 18px); border:0;
       border-radius: 12px; cursor:pointer;
       background: var(--accent); color: var(--accentText);
-      font-weight:800; font-size: 16px; letter-spacing:.02em;
-      transition: transform .05s ease, filter .15s ease;
+      font-weight:800; font-size: clamp(16px, 4.5vw, 16px); letter-spacing:.02em;
+      transition: transform .05s ease;
+      touch-action: manipulation;
     }
-    .cta:active{ transform: translateY(1px); }
-    .muted { color: var(--muted); font-size: 13px; margin-top: 10px; text-align:center; }
+    .cta:active{ transform: translateY(1px) }
+    .muted { color: var(--muted); font-size: clamp(12px,3.4vw,13px); margin-top: 10px; text-align:center }
 
-    /* ====== MODAL CHROME (for popup experience) ====== */
-    .overlay{ position: fixed; inset:0; display:none; align-items: flex-start; justify-content:center; padding-top: clamp(48px, 10vh, 96px); z-index: 10; }
-    .overlay[data-open="1"]{ display:flex; }
-    .overlay::before{ content:""; position:absolute; inset:0; backdrop-filter: blur(1.5px); }
-    .modal{ position:relative; }
+    /* Fallback container */
+    .hidden{ display:none }
+
+    /* ====== Modal popup (mobile-first) ====== */
+    .overlay{
+      position: fixed; inset:0; z-index: 10;
+      display:none; align-items: flex-start; justify-content:center;
+      padding: max(env(safe-area-inset-top), 12px) 12px 12px;
+    }
+    .overlay[data-open="1"]{ display:flex }
+    .overlay::before{ content:""; position:absolute; inset:0; backdrop-filter: blur(1.5px) }
+
+    .modal{ position:relative; width:min(720px, 94vw) }
     .close{
-      position:absolute; top: 10px; right: 14px; border:0; background:transparent;
-      color:#fff; font-size: 26px; line-height:1; cursor:pointer; z-index:11;
+      position:absolute; top: 10px; right: 12px; border:0; background:transparent;
+      color:#fff; font-size: 28px; line-height:1; cursor:pointer; z-index:11;
       text-shadow: 0 2px 8px rgba(0,0,0,.35);
+      padding: 8px;
     }
 
-    @media (max-width: 480px){
-      .slab{ padding:14px }
+    /* Small phones: tighten paddings/shadows */
+    @media (max-width: 420px){
+      .card{ box-shadow: 0 10px 26px rgba(0,0,0,.18) }
+      .slab{ border-radius: 14px }
     }
   </style>
 </head>
@@ -149,14 +169,14 @@
   <div class="bg" aria-hidden="true"></div>
   <div class="tint" aria-hidden="true"></div>
 
-  <!-- HEADLINES like your popup -->
+  <!-- Headings -->
   <div class="wrap" aria-hidden="true">
     <p class="brand">DEPOP_UY</p>
     <h1 class="title">Sorteo maquillaje Elf</h1>
     <p class="sub">Con tu email tenés más chances de participar. Además, te regalamos un cupón de $300 para tu próxima compra.</p>
   </div>
 
-  <!-- ===== FALLBACK (always in DOM; shown for IG/Firefox/blocked JS) ===== -->
+  <!-- ===== FALLBACK (for IG/Firefox/blocked JS) ===== -->
   <div id="fallback" class="hidden">
     <div class="card">
       <div class="card-body">
@@ -181,7 +201,7 @@
     </div>
   </div>
 
-  <!-- ===== MODAL POPUP (nice version) ===== -->
+  <!-- ===== MODAL POPUP ===== -->
   <div id="overlay" class="overlay" aria-hidden="true">
     <button id="close" class="close" aria-label="Cerrar">×</button>
     <div class="modal card">
@@ -204,7 +224,7 @@
     </div>
   </div>
 
-  <!-- ===== Always clear MC suppression so you can retest ===== -->
+  <!-- Clear MC suppression so you can retest -->
   <script>
     (function () {
       ["MCPopupClosed","MCPopupSubscribed"].forEach(function (name) {
@@ -221,7 +241,7 @@
     })();
   </script>
 
-  <!-- ===== Detect IG/FB webview or Firefox strict => show fallback, skip mcjs ===== -->
+  <!-- Detect IG/FB webview or Firefox strict => show fallback, skip mcjs -->
   <script>
     (function () {
       var ua = navigator.userAgent || "";
@@ -235,7 +255,7 @@
     })();
   </script>
 
-  <!-- ===== Load Mailchimp mcjs if allowed, but we still open our nice modal immediately ===== -->
+  <!-- Load Mailchimp mcjs if allowed; open modal quickly for smooth UX -->
   <script>
     (function () {
       function openModal(){
@@ -247,22 +267,22 @@
         window.addEventListener('keydown', function(e){ if(e.key==='Escape'){ close.click(); }});
       }
 
-      if (window.skipMcPopup) return;  // IG/Firefox/etc → only fallback
+      if (window.skipMcPopup) return;  // IG/Firefox/etc → fallback only
 
-      // Open our modal quickly (nice UX even if mcjs gets blocked later)
-      setTimeout(openModal, 350);
+      // Open our modal quickly (even if mcjs gets blocked later)
+      setTimeout(openModal, 300);
 
-      // Try to load mcjs (kept for your connected-site requirement/backups)
+      // Load mcjs (kept for connected-site/analytics if allowed)
       var s = document.createElement("script");
       s.id = "mcjs";
       s.async = 1;
       s.src = "https://chimpstatic.com/mcjs-connected/js/users/da01e192b9e5c7e47f1697a1b/aee3b1fd5f761d99c97a62e16.js";
       document.body.appendChild(s);
 
-      // Always show the fallback under the modal after a moment (if user closes the modal)
+      // Ensure fallback is visible under modal after a moment
       setTimeout(function(){
         document.getElementById("fallback").classList.remove("hidden");
-      }, 1500);
+      }, 1200);
     })();
   </script>
 </body>
