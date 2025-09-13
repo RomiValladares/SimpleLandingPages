@@ -1,7 +1,7 @@
 /* Font */
 @font-face{
   font-family: "Ahsing";
-  src: url("../fonts/typogama-ahsing.otf") format("opentype");
+ src:url("../ahsing-font/typogama-ahsing.otf") format("opentype");
   font-weight: 400 900;
   font-style: normal;
   font-display: swap;
