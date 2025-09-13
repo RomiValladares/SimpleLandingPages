@@ -73,3 +73,61 @@ body{
 #fallback { display:block !important; }
 #fallback .card { z-index: 1; position: relative; }
 
+/* ===== Mailchimp Fallback Form Styling ===== */
+
+/* Form container */
+form {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  max-width: 90%;
+  margin: 20px auto;   /* center horizontally */
+  box-sizing: border-box; /* include padding in width */
+}
+
+/* Input field */
+form input[type="email"] {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+}
+
+/* Button */
+form button,
+form input[type="submit"] {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  background: #f4a024; /* orange */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+form button:hover,
+form input[type="submit"]:hover {
+  background: #e28e10; /* darker orange */
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  form {
+    padding: 15px;
+    max-width: 95%;
+  }
+
+  form input[type="email"],
+  form button,
+  form input[type="submit"] {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
